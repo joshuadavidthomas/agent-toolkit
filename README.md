@@ -35,6 +35,7 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 | 🎨 Design & Frontend | [mui](skills/mui/README.md) | Material-UI v7 patterns |
 | 🎨 Design & Frontend | [openapi-to-typescript](skills/openapi-to-typescript/README.md) | Convert OpenAPI to TypeScript |
 | 🛠️ Development | [database-schema-designer](skills/database-schema-designer/README.md) | Design robust database schemas |
+| 🛠️ Development | [dependency-updater](skills/dependency-updater/README.md) | Smart dependency management |
 | 🛠️ Development | [reducing-entropy](skills/reducing-entropy/README.md) | Minimize codebase size |
 | 🛠️ Development | [session-handoff](skills/session-handoff/README.md) | Seamless AI session transfers |
 | 🎯 Planning | [game-changing-features](skills/game-changing-features/README.md) | Find 10x product opportunities |
@@ -46,8 +47,8 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 | 🧪 Testing | [qa-test-planner](skills/qa-test-planner/README.md) | Comprehensive QA test planning |
 | 📦 Git | [commit-work](skills/commit-work/README.md) | High-quality git commits |
 | 🔧 Utilities | [datadog-cli](skills/datadog-cli/README.md) | Debug with Datadog logs & metrics |
-| 🔧 Utilities | [dependency-updater](skills/dependency-updater/README.md) | Smart dependency management |
 | 🔧 Utilities | [domain-name-brainstormer](skills/domain-name-brainstormer/README.md) | Generate & check domain names |
+| 🔧 Utilities | [humanizer](skills/humanizer/README.md) | Remove AI writing patterns |
 | 🔧 Utilities | [meme-factory](skills/meme-factory/README.md) | Generate memes with API |
 | 🔧 Utilities | [web-to-markdown](skills/web-to-markdown/README.md) | Convert webpages to Markdown |
 
