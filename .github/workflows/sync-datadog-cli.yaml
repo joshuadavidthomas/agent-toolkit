@@ -2,9 +2,9 @@ name: Sync datadog-cli from cc-datadog
 
 on:
   schedule:
-    # Roda 2x por dia: 9h e 21h UTC (6h e 18h BRT)
-    - cron: '0 9,21 * * *'
-  workflow_dispatch:  # Permite trigger manual no GitHub UI
+    # Runs daily at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
 
 permissions:
   contents: write
@@ -23,10 +23,10 @@ jobs:
 
       - name: Sync skill directory
         run: |
-          # Remove diretório antigo se existir
+          # Remove old directory if it exists
           rm -rf skills/datadog-cli
 
-          # Copia nova versão
+          # Copy new version
           cp -r /tmp/cc-datadog/skills/datadog-cli skills/
 
           echo "✅ Copied datadog-cli from cc-datadog"
