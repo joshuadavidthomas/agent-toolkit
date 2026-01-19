@@ -1,6 +1,6 @@
 # Model-Specific Expectations
 
-This document describes expected behavior differences across Claude models when using the creating-handoffs skill.
+This document describes expected behavior differences across Claude models when using the session-handoff skill.
 
 ## Model Characteristics
 

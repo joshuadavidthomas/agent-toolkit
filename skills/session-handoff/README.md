@@ -1,7 +1,5 @@
 # Session Handoff Skill
 
-> **Note:** There is a naming mismatch - the folder is named `session-handoff` but the SKILL.md frontmatter specifies `name: creating-handoffs`. Consider updating the SKILL.md to match the folder name.
-
 ## Overview
 
 The Session Handoff skill creates comprehensive handoff documents that enable fresh AI agents to seamlessly continue work with zero ambiguity. It solves the long-running agent context exhaustion problem by preserving complete context, decisions, and state across sessions.

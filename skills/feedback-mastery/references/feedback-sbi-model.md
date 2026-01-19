@@ -203,4 +203,4 @@ Now check:
 
 ---
 
-**Related:** Return to `feedback-conversations` skill for the full Preparation-Delivery-Follow-up framework.
+**Related:** Return to `feedback-mastery` skill for the full Preparation-Delivery-Follow-up framework.

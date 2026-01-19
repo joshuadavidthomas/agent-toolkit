@@ -250,4 +250,4 @@ Ready-to-use opening lines, responses to common reactions, and frameworks for na
 
 ---
 
-**Related:** Return to `feedback-conversations` skill for the full framework, or see `feedback-sbi-model.md` for structuring specific feedback.
+**Related:** Return to `feedback-mastery` skill for the full framework, or see `feedback-sbi-model.md` for structuring specific feedback.

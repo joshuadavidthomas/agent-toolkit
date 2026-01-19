@@ -2,7 +2,7 @@
 
 Date: 2025-11-27
 Model: claude-opus-4-5-20251101
-Skill version: creating-handoffs v1.0
+Skill version: session-handoff v1.0
 
 ## Script Verification Tests
 
@@ -70,7 +70,7 @@ Sample handoffs: 3 (fresh, stale, incomplete)
 
 1. Set up test environment:
    ```bash
-   python /Users/galihcitta/.claude/skills/creating-handoffs/evals/setup_test_env.py
+   python /Users/galihcitta/.claude/skills/session-handoff/evals/setup_test_env.py
    ```
 
 2. Start Claude Code with desired model:

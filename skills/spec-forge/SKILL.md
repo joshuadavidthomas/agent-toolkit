@@ -246,8 +246,5 @@ Next steps:
   1. Review the sections in <planning_dir>/sections/
   2. Each section is self-contained and can be implemented independently
   3. Use sections/index.md to understand dependencies and parallelization
-
-To implement a section:
-  /dev-impl @<planning_dir>/sections/section-01-*.md
 ═══════════════════════════════════════════════════════════════
 ```

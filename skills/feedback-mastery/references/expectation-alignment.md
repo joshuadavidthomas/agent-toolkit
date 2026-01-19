@@ -268,4 +268,4 @@ When scope changes are requested, respond with:
 
 ---
 
-**Related:** Return to `feedback-conversations` skill for difficult conversation frameworks.
+**Related:** Return to `feedback-mastery` skill for difficult conversation frameworks.

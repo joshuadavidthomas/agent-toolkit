@@ -201,7 +201,7 @@ For each scenario, score:
 
 Date: YYYY-MM-DD
 Model: [haiku/sonnet/opus]
-Skill version: creating-handoffs
+Skill version: session-handoff
 
 | Scenario | Score | Notes |
 |----------|-------|-------|

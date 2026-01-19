@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Set up a test environment for evaluating the creating-handoffs skill.
+Set up a test environment for evaluating the session-handoff skill.
 
 Creates a mock project with:
 - Git repository with commit history
@@ -48,7 +48,7 @@ def create_test_project(base_path: str):
     # Create sample files
     (path / "README.md").write_text("""# Test Project
 
-A sample project for testing the creating-handoffs skill.
+A sample project for testing the session-handoff skill.
 
 ## Features
 - User authentication
@@ -384,7 +384,7 @@ def clean_test_env(path: str):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Set up test environment for creating-handoffs skill"
+        description="Set up test environment for session-handoff skill"
     )
     parser.add_argument(
         "--path",
@@ -408,7 +408,7 @@ def main():
         print(f"\nTest environment ready at: {args.path}")
         print(f"\nTo test, run:")
         print(f"  cd {args.path}")
-        print(f"  # Then use Claude Code with the creating-handoffs skill")
+        print(f"  # Then use Claude Code with the session-handoff skill")
 
 
 if __name__ == "__main__":

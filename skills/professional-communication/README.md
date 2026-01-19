@@ -203,8 +203,7 @@ Before sending any professional communication, verify:
 
 ## Companion Skills
 
-- `feedback-conversations` - For difficult conversations and feedback delivery
-- `technical-presentations` - For structuring talks and presentations
+- `feedback-mastery` - For difficult conversations and feedback delivery
 - `/draft-email` - Generate emails using these frameworks
 
 ## Version
