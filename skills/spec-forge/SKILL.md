@@ -62,6 +62,7 @@ Determine session state by checking existing files:
    - `claude-spec.md`
    - `claude-plan.md`
    - `claude-integration-notes.md`
+   - `claude-ralph-loop-prompt.md`
    - `reviews/` directory
    - `sections/` directory
 
@@ -77,7 +78,8 @@ Determine session state by checking existing files:
 | + reviews | resume | Step 11 (integrate) |
 | + integration-notes | resume | Step 12 (user review) |
 | + sections/index.md | resume | Step 14 (write sections) |
-| all sections complete | complete | Done |
+| all sections complete | resume | Step 15 (ralph-loop prompt) |
+| + claude-ralph-loop-prompt.md | complete | Done |
 
 5. Create TODO list with TodoWrite based on current state
 
@@ -99,7 +101,7 @@ To start fresh, delete the planning directory files.
 
 ```
 ═══════════════════════════════════════════════════════════════
-STEP {N}/16: {STEP_NAME}
+STEP {N}/17: {STEP_NAME}
 ═══════════════════════════════════════════════════════════════
 {details}
 Step {N} complete: {summary}
@@ -221,11 +223,72 @@ For each section defined in the manifest:
 
 **IMPORTANT: Each section file must be completely self-contained.** The implementer should NOT need to reference any other document.
 
-### 15. Final Status
+### 15. Generate Ralph-Loop Prompt (Optional Integration)
 
-Verify all section files were created successfully.
+Create `<planning_dir>/claude-ralph-loop-prompt.md` for optional ralph-loop integration.
 
-### 16. Output Summary
+**This file embeds all section content inline** so users who want autonomous execution can run a single command:
+```
+/ralph-loop @<planning_dir>/claude-ralph-loop-prompt.md --completion-promise "COMPLETE" --max-iterations 100
+```
+
+**File structure:**
+```markdown
+You are implementing a feature based on a spec-forge plan.
+
+## Your Mission
+
+Read the planning documents and implement ALL sections in dependency order.
+
+## Planning Documents
+
+### Section Index (dependencies and order)
+
+{EMBED: full content of sections/index.md here}
+
+### Section Files
+
+---
+## section-01-name.md
+---
+{EMBED: full content of section-01-name.md}
+
+---
+## section-02-name.md
+---
+{EMBED: full content of section-02-name.md}
+
+{... repeat for all sections ...}
+
+## Execution Rules
+
+1. Read the index.md to understand the dependency graph
+2. Execute sections in the correct order (respect dependencies)
+3. For each section:
+   - Implement all requirements
+   - Verify acceptance criteria are met
+   - Run any tests mentioned
+   - Only move to next section when current is complete
+4. Track progress by creating planning/PROGRESS.md with completed sections
+
+## On Completion
+
+When ALL sections are implemented and verified:
+- Update planning/PROGRESS.md with final status
+- Output <promise>ALL-SECTIONS-COMPLETE</promise>
+
+If blocked on any section after multiple attempts:
+- Document the blocker in planning/PROGRESS.md
+- Output <promise>BLOCKED</promise>
+```
+
+**Important:** Replace `{EMBED: ...}` placeholders with actual file contents when writing.
+
+### 16. Final Status
+
+Verify all section files and ralph-loop prompt were created successfully.
+
+### 17. Output Summary
 
 Print generated files and next steps:
 ```
@@ -241,10 +304,16 @@ Generated files:
   - claude-integration-notes.md (feedback decisions)
   - reviews/ (external LLM feedback)
   - sections/ (implementation units)
+  - claude-ralph-loop-prompt.md (for ralph-loop integration)
 
-Next steps:
-  1. Review the sections in <planning_dir>/sections/
-  2. Each section is self-contained and can be implemented independently
-  3. Use sections/index.md to understand dependencies and parallelization
+How to implement:
+
+Option A - Manual (recommended for learning/control):
+  1. Read sections/index.md to understand dependencies
+  2. Implement each section file in order
+  3. Each section is self-contained with acceptance criteria
+
+Option B - Autonomous (with ralph-loop plugin):
+  /ralph-loop @<planning_dir>/claude-ralph-loop-prompt.md --completion-promise "COMPLETE" --max-iterations 100
 ═══════════════════════════════════════════════════════════════
 ```

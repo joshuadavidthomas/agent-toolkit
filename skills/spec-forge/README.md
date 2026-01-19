@@ -29,7 +29,8 @@ Result: Clear implementation roadmap, reviewed by multiple LLMs, ready for execu
 - [External Review](#external-review)
 - [Resuming](#resuming)
 - [Best Practices](#best-practices)
-- [Integration with ralph-loop](#integration-with-ralph-loop)
+- [Implementing the Plan](#implementing-the-plan)
+- [Integration with ralph-loop (Optional)](#integration-with-ralph-loop-optional)
 - [File Structure](#file-structure)
 
 ## Workflow
@@ -113,6 +114,7 @@ planning/
 ├── claude-spec.md               # Synthesized specification
 ├── claude-plan.md               # Implementation plan
 ├── claude-integration-notes.md  # Review feedback decisions
+├── claude-ralph-loop-prompt.md  # Ready-to-run ralph-loop prompt
 ├── reviews/
 │   ├── gemini-review.md         # Gemini's feedback
 │   └── codex-review.md          # Codex's feedback
@@ -130,6 +132,7 @@ planning/
 | `claude-plan.md` | The main deliverable - complete implementation plan |
 | `sections/*.md` | Self-contained units ready for implementation |
 | `reviews/*.md` | External perspectives on your plan |
+| `claude-ralph-loop-prompt.md` | One-command execution with ralph-loop |
 
 ## External Review
 
@@ -181,6 +184,8 @@ spec-forge detects existing files and resumes from where it left off.
 | `+ claude-plan.md` | External review |
 | `+ reviews/` | Feedback integration |
 | `+ sections/index.md` | Section writing |
+| `+ all sections` | Ralph-loop prompt generation |
+| `+ claude-ralph-loop-prompt.md` | Done |
 
 ## Best Practices
 
@@ -194,13 +199,64 @@ spec-forge detects existing files and resumes from where it left off.
 
 5. **Iterate** - If the plan isn't right, edit `claude-plan.md` and re-run section generation.
 
-## Integration with ralph-loop
+## Implementing the Plan
 
-After spec-forge generates your implementation sections, you can use the [ralph-loop](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/ralph-loop) plugin to execute each section autonomously.
+After spec-forge completes, you have self-contained section files ready for implementation. Choose your approach:
+
+### Option A: Manual Implementation (Recommended)
+
+Best for: learning the codebase, maintaining control, reviewing as you go.
+
+```bash
+# 1. Check the dependency order
+cat planning/sections/index.md
+
+# 2. Open first section
+cat planning/sections/section-01-foundation.md
+
+# 3. Implement following the acceptance criteria
+
+# 4. Move to next section, repeat
+```
+
+Each section file contains:
+- Background context
+- Requirements
+- Implementation details
+- Acceptance criteria (checklist)
+- Files to create/modify
+
+You can implement sections yourself, delegate to another Claude session, or hand off to a team member.
+
+### Option B: Autonomous with ralph-loop (Optional)
+
+Best for: hands-off execution, large plans, overnight runs.
+
+```bash
+/ralph-loop @planning/claude-ralph-loop-prompt.md --completion-promise "COMPLETE" --max-iterations 100
+```
+
+See [Integration with ralph-loop](#integration-with-ralph-loop-optional) for details.
+
+---
+
+## Integration with ralph-loop (Optional)
+
+spec-forge generates `claude-ralph-loop-prompt.md` for optional integration with [ralph-loop](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/ralph-loop).
 
 ### What is ralph-loop?
 
 Ralph Loop is an iterative execution technique that keeps Claude working on a task until completion. It uses a Stop hook to create a self-referential feedback loop - Claude works, checks progress, and continues until the completion criteria are met.
+
+### One-Command Execution
+
+After spec-forge completes, it generates `claude-ralph-loop-prompt.md` with all section content embedded. Execute the entire plan with:
+
+```bash
+/ralph-loop @planning/claude-ralph-loop-prompt.md --completion-promise "COMPLETE" --max-iterations 100
+```
+
+That's it. Walk away and come back to working code.
 
 ### The Workflow
 
@@ -210,26 +266,33 @@ Ralph Loop is an iterative execution technique that keeps Claude working on a ta
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │   1. /spec-forge @planning/feature.md                           │
-│      └── Generates sections/section-01-*.md, section-02-*, ...  │
+│      └── Generates sections + claude-ralph-loop-prompt.md       │
 │                                                                 │
-│   2. Review sections/index.md for dependencies                  │
+│   2. (Optional) Review sections/index.md for dependencies       │
 │                                                                 │
-│   3. For each section (respecting dependency order):            │
-│      └── /ralph-loop with section content                       │
+│   3. /ralph-loop @planning/claude-ralph-loop-prompt.md \        │
+│        --completion-promise "COMPLETE" --max-iterations 100     │
 │                                                                 │
 │   4. Walk away. Come back to working code.                      │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Example: Executing a Section
+### What the Prompt Does
 
-After spec-forge completes, you have self-contained section files. Execute them with ralph-loop:
+The generated `claude-ralph-loop-prompt.md` instructs ralph-loop to:
+
+1. Parse the section index for dependencies
+2. Execute each section in the correct order
+3. Verify acceptance criteria for each section
+4. Track progress in `PROGRESS.md`
+5. Continue until all sections are done (or hit max iterations)
+
+### Executing Individual Sections
+
+If you prefer to execute sections one at a time:
 
 ```bash
-# Check the section index for dependency order
-cat planning/sections/index.md
-
 # Execute section 01 (usually foundation/setup)
 /ralph-loop "Implement the following section. Follow all requirements exactly.
 
@@ -241,77 +304,11 @@ When ALL acceptance criteria are met and tests pass:
 If blocked after 10 iterations, document blockers and output <promise>SECTION-01-BLOCKED</promise>" --completion-promise "SECTION-01" --max-iterations 30
 ```
 
-### Batch Execution Script
+### Tips
 
-For multiple sections, create a simple execution plan:
-
-```bash
-# Execute sections in dependency order
-# (check sections/index.md for the correct order)
-
-# Section 01 - Foundation (no dependencies)
-/ralph-loop "$(cat planning/sections/section-01-foundation.md)
-
-Output <promise>DONE</promise> when complete." --completion-promise "DONE" --max-iterations 30
-
-# Section 02 and 03 can run in parallel (if you have multiple sessions)
-# Section 04 depends on 02 and 03, run after both complete
-```
-
-### Full Auto: Execute All Sections
-
-For a true "walk away" experience, let ralph-loop read the index and execute all sections in order:
-
-```bash
-/ralph-loop "You are implementing a feature based on a spec-forge plan.
-
-## Your Mission
-
-Read the planning documents and implement ALL sections in dependency order.
-
-## Planning Documents
-
-### Section Index (dependencies and order)
-$(cat planning/sections/index.md)
-
-### Section Files
-$(for f in planning/sections/section-*.md; do echo "---"; echo "## $(basename $f)"; echo "---"; cat "$f"; echo ""; done)
-
-## Execution Rules
-
-1. Read the index.md to understand the dependency graph
-2. Execute sections in the correct order (respect dependencies)
-3. For each section:
-   - Implement all requirements
-   - Verify acceptance criteria are met
-   - Run any tests mentioned
-   - Only move to next section when current is complete
-4. Track progress by creating planning/PROGRESS.md with completed sections
-
-## On Completion
-
-When ALL sections are implemented and verified:
-- Update planning/PROGRESS.md with final status
-- Output <promise>ALL-SECTIONS-COMPLETE</promise>
-
-If blocked on any section after multiple attempts:
-- Document the blocker in planning/PROGRESS.md
-- Output <promise>BLOCKED</promise>" --completion-promise "COMPLETE" --max-iterations 100
-```
-
-This single command will:
-1. Parse the section index for dependencies
-2. Execute each section in the correct order
-3. Track progress in `PROGRESS.md`
-4. Continue until all sections are done (or hit max iterations)
-
-### Tips for ralph-loop Integration
-
-1. **Respect dependencies** - Check `sections/index.md` for the dependency graph before executing
-2. **Set max-iterations** - Always use `--max-iterations` as a safety net (20-50 is reasonable)
-3. **Clear completion criteria** - Each section has acceptance criteria; use them in your prompt
-4. **One section at a time** - Each section is self-contained; don't mix multiple sections
-5. **Review before next section** - Check the output before moving to dependent sections
+1. **Set max-iterations** - Always use `--max-iterations` as a safety net (50-100 is reasonable for full execution)
+2. **Review PROGRESS.md** - Check progress during long executions
+3. **Respect dependencies** - If executing manually, check `sections/index.md` for the dependency graph
 
 ### Installing ralph-loop
 
